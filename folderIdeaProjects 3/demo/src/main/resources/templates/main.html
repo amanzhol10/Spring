@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Task Manager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-teal bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="#">TASK MANAGER</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-3">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">All Tasks</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+
+    <button type="button" class="btn btn-primary mb-3"
+            data-bs-toggle="modal" data-bs-target="#addTaskModal">
+        + Add New Task
+    </button>
+
+    <table class="table table-bordered table-striped text-center align-middle">
+        <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>DEADLINE DATE</th>
+            <th>IS COMPLETED</th>
+            <th>DETAILS</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="task:${tasks}">
+            <td th:text="${task.id}"></td>
+            <td th:text="${task.name}"></td>
+            <td th:text="${task.deadlineDate}"></td>
+            <td th:text="${task.completed} ? 'YES':'NO'"></td>
+            <td>
+                <a class="btn btn-info btn-sm text-white"
+                   th:href="@{/tasks/details/{id}(id=${task.id})}">
+                    DETAILS
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="addTaskModal" tabindex="-1" aria-labelledby="addTaskLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="addTaskLabel">Add New Task</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <form th:action="@{/tasks}" method="post">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Task Name</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Deadline Date</label>
+                        <input type="date" class="form-control" name="deadlineDate" required>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="isCompleted" id="isCompleted">
+                        <label class="form-check-label" for="isCompleted">Completed</label>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success">Save Task</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+

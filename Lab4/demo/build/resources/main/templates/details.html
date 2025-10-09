@@ -1,0 +1,53 @@
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/main.html">
+
+
+<div layout:fragment="mainFragment" class="container">
+    <h2  th:if="${!li.handled}" class="text-danger text-center fw-bold me-2">***Новая необработанная заявка***</h2>
+    <h2  th:if="${li.handled}" class="text-success text-center fw-bold me-2">Обработанная заявка</h2>
+        <form th:action="@{/edit/{id}(id=${li.id})}" method="post">
+            <div class="mb-3">
+                <label class="form-label">ФИО:</label>
+                <input type="text" class="form-control" name="fullName"
+                       th:value="${li.userName}" required placeholder="ФИО">
+            </div>
+
+            <div class="mb-3">
+                <select name="course" id="course" class="form-select w-100" th:value="${li.courseName}">
+                    <option value="Java">Java</option>
+                    <option value="Web">Web</option>
+                    <option value="Python">Python</option>
+                </select>
+            </div>
+
+
+            <div class="mb-3">
+                <label class="form-label">Телефон:</label>
+                <input type="number" class="form-control" name="number"
+                       th:value="${li.phone}" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Комментарии:</label>
+                <input type="text" class="form-control" name="comment"
+                       th:value="${li.commentary}" required placeholder="Комментарий">
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-success mb-3" type="submit">Сохранить</button>
+                <form th:action="@{/process/{id}(id=${li.id})}" method="post" >
+                    <button th:if="${!li.handled}" type="submit" class="btn btn-success mb-3">
+                        Обработать заявку
+                    </button>
+                </form>
+                <form th:action="@{/delete/{id}(id=${li.id})}" method="post" onsubmit="return confirm('Are you sure you want to delete this task?')">
+                    <button type="submit" class="btn btn-danger">Удалить</button>
+                </form>
+            </div>
+
+        </form>
+
+
+</div>
+</html>

@@ -1,0 +1,132 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/main.html">
+
+<div layout:fragment="mainFragment" class="container mt-4">
+
+    <h2 th:if="${!li.handled}" class="text-danger text-center fw-bold mb-3">
+       Новая необработанная заявка
+    </h2>
+
+    <h2 th:if="${li.handled}" class="text-success text-center fw-bold mb-3">
+        Обработанная заявка
+    </h2>
+
+    <form th:action="@{/app/edit/{id}(id=${li.id})}" method="post">
+
+        <div class="mb-3">
+            <label class="form-label">ФИО:</label>
+            <input type="text" class="form-control"
+                   name="fullName"
+                   th:value="${li.userName}"
+                   required placeholder="ФИО">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Курс:</label>
+            <select name="course" id="course" class="form-select w-100">
+                <option th:each="course : ${courses}"
+                        th:value="${course.id}"
+                        th:selected="${li.course != null and course.id == li.course.id}"
+                        th:text="|${course.name} (${course.price} USD)|">
+                </option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Телефон:</label>
+            <input type="text" class="form-control"
+                   name="phone"
+                   th:value="${li.phone}"
+                   required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Комментарии:</label>
+            <input type="text" class="form-control"
+                   name="comment"
+                   th:value="${li.commentary}"
+                   required placeholder="Комментарий">
+        </div>
+
+        <button class="btn btn-success mb-3" type="submit">Сохранить</button>
+    </form>
+
+    <button th:if="${!li.handled}" type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#assignOperator">
+        Обработать заявку
+    </button>
+
+
+    <form th:action="@{/app/delete/{id}(id=${li.id})}" method="post"
+          onsubmit="return confirm('Вы уверены, что хотите удалить заявку?')">
+        <button type="submit" class="btn btn-danger">Удалить</button>
+    </form>
+    <table th:if="${li.operators != null and li.operators.size() > 0}"
+           class="table table-bordered table-hover mt-3 align-middle">
+        <thead class="table-light">
+        <tr>
+            <th style="width: 60px;">Удалить</th>
+            <th>Имя</th>
+            <th>Фамилия</th>
+            <th>Департамент</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="l : ${li.operators}">
+            <td class="text-center">
+                <form th:action="@{/app/removeOper/{appId}/{opId}(appId=${li.id}, opId=${l.id})}" method="post" class="m-0 p-0">
+                    <button type="submit"
+                            class="btn btn-danger btn-sm d-flex justify-content-center align-items-center p-0"
+                            style="width: 28px; height: 28px; font-weight: bold; border-radius: 6px;">
+                        X
+                    </button>
+                </form>
+
+            </td>
+            <td th:text="${l.name}"></td>
+            <td th:text="${l.surname}"></td>
+            <td th:text="${l.department}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="modal fade" id="assignOperator">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header"><h3>Выберите оператора</h3>
+                </div>
+                <form th:action="@{/app/process/{id}(id=${li.id})}" method="post">
+                    <div class="modal-body">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Выбрать</th>
+                                <th>Имя</th>
+                                <th>Фамилия</th>
+                                <th>Департмент</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="ops:${oper}">
+                                <td><input type="checkbox" name="operId" th:value="${ops.id}"></td>
+                                <td th:text="${ops.name}" ></td>
+                                <td th:text="${ops.surname}"  ></td>
+                                <td th:text="${ops.department}" ></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-primary">Назначить</button>
+                    </div>
+                </form>
+            </div>
+
+            </div>
+
+
+
+    </div>
+
+</div>
+</html>

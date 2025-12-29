@@ -1,0 +1,32 @@
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                           http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+
+    <changeSet id="create-user-permissions" author="you">
+        <createTable tableName="user_permissions">
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="permission_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="user_permissions"
+                                 baseColumnNames="user_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_user_permissions_user"/>
+
+        <addForeignKeyConstraint baseTableName="user_permissions"
+                                 baseColumnNames="permission_id"
+                                 referencedTableName="permissions"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_user_permissions_permission"/>
+    </changeSet>
+
+</databaseChangeLog>

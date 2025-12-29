@@ -1,0 +1,29 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                           http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+
+
+
+    <changeSet id="14" author="Amanzhol">
+        <insert tableName="books">
+            <column name="title" value="1984"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="category_id" valueNumeric="1"/>
+            <column name="total_copies" valueNumeric="10"/>
+            <column name="available_copies" valueNumeric="7"/>
+        </insert>
+
+        <insert tableName="books">
+            <column name="title" value="Harry Potter and the Philosopher's Stone"/>
+            <column name="author_id" valueNumeric="2"/>
+            <column name="category_id" valueNumeric="2"/>
+            <column name="total_copies" valueNumeric="15"/>
+            <column name="available_copies" valueNumeric="12"/>
+        </insert>
+    </changeSet>
+
+
+</databaseChangeLog>
